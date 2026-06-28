@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Boards</h1>
+{% if session['role'] != 'read_only' %}
+<form action="{{ url_for('ticket.create') }}" method="POST">
+    <label for="title">Title</label>
+    <input type="text" name="title" placeholder="Ticket" required>
+    <label for="description">Description</label>
+    <textarea name="description" id="description" placeholder="This ticket is about..."></textarea>
+    <label for="priority">Priority</label>
+    <select name="priority" id="priority" required>
+        <option value="" selected hidden>Select</option>
+        {% for level in priority_levels.keys() %}
+            <option value="{{ level }}">{{ level.capitalize() }}</option>
+        {% endfor %}
+    </select>
+    <button>
+        Create board
+    </button>
+</form>
+{% endif %}
+<div class="ticket_container">
+    {% for ticket in tickets %}
+        <div class="ticket_card">
+            <h4 style="background-color: {{ priority_levels[ticket.priority] }};">{{ ticket.title }}</h4>
+            <p>{{ ticket.description }}</p>
+            <span>{{ ticket.author.username }}</span> <br>
+            <span>{{ ticket.created_at }}</span>
+            
+            {% if ticket.finished %}
+                <h5>Conclution</h5>
+                <p>{{ ticket.conclution }}</p>
+            {% else %}
+            <form action="{{ url_for('ticket.edit', id=ticket.id) }}" method="POST">
+                <label for="title">Title</label>
+                <input type="text" name="title" placeholder="Ticket" required>
+                <label for="description">Description</label>
+                <textarea name="description" id="description" placeholder="This ticket is about..."></textarea>
+                <label for="priority">Priority</label>
+                <select name="priority" id="priority" required>
+                    <option value="" selected hidden>Select</option>
+                    {% for level in priority_levels.keys() %}
+                        <option value="{{ level }}">{{ level.capitalize() }}</option>
+                    {% endfor %}
+                </select>
+                <button>
+                    Edit Ticket
+                </button>
+            </form>
+            <form action="{{ url_for('ticket.finish', id=ticket.id) }}" method="POST">
+                <label for="conclution">Conclution</label>
+                <textarea name="conclution" id="conclution" placeholder="The issue was conclude."></textarea>
+                <button>
+                    Conclude ticket
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

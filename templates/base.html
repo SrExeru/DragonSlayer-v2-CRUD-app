@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>DragonSlayer | {{ title }}</title>
+</head>
+<body>
+    <header>
+        <div class="header_logo">
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+            <h2>DragonSlayer</h2>
+        </div>
+        <nav>
+            {% if session.get('role') == 'administrator' %}
+            <a href="{{ url_for('admin.menu') }}">Admin</a>
+            {% endif %}
+            {% if session.get('id') %}
+            <a href="{{ url_for('main.home') }}">Dashboard</a>
+            <a href="{{ url_for('auth.logout_user') }}">Logout</a>
+            {% else %}
+            <a href="{{ url_for('auth.login_user') }}">Login</a>
+            {% endif %}
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>
+            Esto es un footer
+        </p>
+        <p>
+            En algun momento tocara rehacer todos los html puesto que
+            solo estan <br>hechos para ver que la informacion de la base de datos si
+            se pase... PTM
+        </p>
+        <p>
+            No importa lo que pase, sigue siendo un footer
+        </p>
+    </footer>
+</body>
+</html>

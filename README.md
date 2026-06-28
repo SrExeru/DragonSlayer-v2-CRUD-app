@@ -1,0 +1,3 @@
+# DragonSlayer v.2
+in progress...
+Dragon logo from [Flaticon](https://www.flaticon.com)
