@@ -37,9 +37,40 @@
 <div class="user_container">
 {% for user in users %}
 <div class="user_card">
-    <h3>{{ user.username }}</h3>
+    <h3>{{ user.username }}#{{ user.id }}</h3>
     <h4>{{ user.email }}</h4>
     <h5>{{ user.role.replace('_', ' ').capitalize() }}</h5>
+    {% if roles[session['role']] > roles[user.role] %}
+    <form action="{{ url_for('admin.edit_user', id = user.id) }}" method="POST">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="edited_username" value="{{ user.username }}" required>
+        <label for="email">email</label>
+        <input type="email" name="email" id="edited_email" value="{{ user.email }}" required>
+        
+        <select name="role" id="edited_role" required>
+            {% for role in roles.keys() %}
+            {% if roles[role] < roles[session['role']] %}
+                {% if role == user.role %}
+                <option value="{{ role }}" selected>{{ role.capitalize().replace('_', ' ') }}</option>
+                {% else %}
+                <option value="{{ role }}">{{ role.capitalize().replace('_', ' ') }}</option>
+                {% endif %}
+            {% endif %}
+            {% endfor %}
+        </select>
+        
+        <button>
+            Edit user
+        </button>
+    </form>
+    <form action="{{ url_for('admin.reset_password', id = user.id) }}" method="POST">
+        <label for="new_password">New password</label>
+        <input type="password" name="password" id="new_password" required>
+        <button>
+            Reset password
+        </button>
+    </form>
+    {% endif %}
 </div>
 {% endfor %}
 </div>
