@@ -18,6 +18,7 @@
             {% endif %}
             {% if session.get('id') %}
             <a href="{{ url_for('main.home') }}">Dashboard</a>
+            <a href="{{ url_for('profile.settings') }}">Profile</a>
             <a href="{{ url_for('auth.logout_user') }}">Logout</a>
             {% else %}
             <a href="{{ url_for('auth.login_user') }}">Login</a>

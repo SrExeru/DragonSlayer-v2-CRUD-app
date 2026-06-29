@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Profile settings</h1>
+
+<h2>{{ user.username }}</h2>
+<h3>Role</h3>
+<p>{{ user.role.capitalize().replace('_', ' ') }}</p>
+
+<form action="{{ url_for('profile.change_username') }}" method="POST">
+    <h3>Change username</h3>
+    <label for="new_username">New username</label> <br>
+    <input type="text" name="new_username" value="{{ user.username }}" required> <br>
+    <button>
+        Change username
+    </button>
+</form>
+<form action="{{ url_for('profile.change_email') }}" method="POST">
+    <h3>Change email</h3>
+    <label for="new_email">New email</label> <br>
+    <input type="email" name="new_email" value="{{ user.email }}" required> <br>
+    <button>
+        Change email
+    </button>
+</form>
+<form action="{{ url_for('profile.change_password') }}" method="POST">
+    <h3>Change password</h3>
+    <label for="actual_password">Actual password</label> <br>
+    <input type="password" name="actual_password" placeholder="*******" required> <br>
+    <label for="new_password">New password</label> <br>
+    <input type="password" name="new_password" placeholder="*******" required> <br>
+    <button>
+        Change password
+    </button>
+</form>
+
+{% endblock %}

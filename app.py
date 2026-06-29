@@ -6,6 +6,7 @@ from routes.auth import auth
 from routes.ticket import ticket
 from routes.main import main
 from routes.admin import admin
+from routes.profile import profile
 
 app = Flask(__name__)
 
@@ -23,3 +24,4 @@ app.register_blueprint(auth)
 app.register_blueprint(ticket)
 app.register_blueprint(main)
 app.register_blueprint(admin)
+app.register_blueprint(profile)
