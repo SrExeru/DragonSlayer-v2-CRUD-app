@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, session, redirect, request, url_for
 from utils.db import db
-from utils.auth import login_required
+from utils.auth import login_required, user_can
 from models.user import User
 from werkzeug.security import generate_password_hash
 
@@ -18,6 +18,7 @@ def settings ():
     
 @profile.route('/change_username', methods=['POST'])
 @login_required
+@user_can('edit_self')
 def change_username ():
     if request.method == 'POST':
         new_username = request.form.get('new_username')
@@ -33,6 +34,7 @@ def change_username ():
 
 @profile.route('/change_email', methods=['POST'])
 @login_required
+@user_can('edit_self')
 def change_email ():
     if request.method == 'POST':
         new_email = request.form.get('new_email')
@@ -48,6 +50,7 @@ def change_email ():
 
 @profile.route('/change_password', methods=['POST'])
 @login_required
+@user_can('edit_self')
 def change_password ():
     if request.method == 'POST':
         password = request.form.get('actual_password')

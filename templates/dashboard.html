@@ -12,8 +12,8 @@
     <label for="priority">Priority</label>
     <select name="priority" id="priority" required>
         <option value="" selected hidden>Select</option>
-        {% for level in priority_levels.keys() %}
-            <option value="{{ level }}">{{ level.capitalize() }}</option>
+        {% for level in priority_levels.values() %}
+            <option value="{{ level.name }}">{{ level }}</option>
         {% endfor %}
     </select>
     <button>
@@ -24,7 +24,7 @@
 <div class="ticket_container">
     {% for ticket in tickets %}
         <div class="ticket_card">
-            <h4 style="background-color: {{ priority_levels[ticket.priority] }};">{{ ticket.title }}</h4>
+            <h4 style="background-color: {{ priority_levels[ticket.priority].color }};">{{ ticket.title }}</h4>
             <p>{{ ticket.description }}</p>
             <span>{{ ticket.author.username }}</span> <br>
             <span>{{ ticket.created_at }}</span>
@@ -41,8 +41,8 @@
                 <label for="priority">Priority</label>
                 <select name="priority" id="priority" required>
                     <option value="" selected hidden>Select</option>
-                    {% for level in priority_levels.keys() %}
-                        <option value="{{ level }}">{{ level.capitalize() }}</option>
+                    {% for level in priority_levels.values() %}
+                        <option value="{{ level.name }}">{{ level }}</option>
                     {% endfor %}
                 </select>
                 <button>

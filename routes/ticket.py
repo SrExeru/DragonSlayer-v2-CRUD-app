@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, url_for, redirect, request, session
-from utils.auth import login_required, not_read_only
+from utils.auth import login_required, user_can
 from utils.db import db
 from models.user import User
 from models.ticket import Ticket
@@ -7,7 +7,8 @@ from models.ticket import Ticket
 ticket = Blueprint('ticket', __name__, url_prefix='/ticket')
 
 @ticket.route('/create', methods=['POST'])
-@not_read_only
+@login_required
+@user_can('create_ticket')
 def create ():
     if request.method == 'POST':
         author_id = session.get('id')
@@ -25,7 +26,8 @@ def create ():
     return redirect(url_for('main.home'))
 
 @ticket.route('/edit/<id>', methods=['POST'])
-@not_read_only
+@login_required
+@user_can('edit_ticket')
 def edit (id):
     if request.method == 'POST':
         ticket = db.session.query(Ticket).filter_by(id = id).first()
@@ -41,7 +43,8 @@ def edit (id):
     return redirect(url_for('main.home'))
 
 @ticket.route('/finish/<id>', methods=['POST'])
-@not_read_only
+@login_required
+@user_can('conclude_ticket')
 def finish (id):
     if request.method == 'POST':
         ticket = db.session.query(Ticket).filter_by(id = id).first()

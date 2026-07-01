@@ -1,6 +1,6 @@
 from utils.db import db
 from werkzeug.security import generate_password_hash, check_password_hash
-from utils.config import get_role
+from datetime import datetime
 
 class User (db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -8,17 +8,20 @@ class User (db.Model):
     email = db.Column(db.String(100), unique = True, nullable = False)
     password = db.Column(db.String(255), nullable = False)
     role = db.Column(db.String(20), nullable = False)
+    status = db.Column(db.String(20), nullable = False, default = 'active')
     tickets = db.relationship(
         'Ticket',
         back_populates = 'author'
     )
+    created_at = db.Column(db.DateTime, nullable = False, server_default = db.func.now())
+    updated_at = db.Column(db.DateTime, server_default = db.func.now(), onupdate = db.func.now())
     
     def __init__(self, username: str, email: str, password: str, role: str):
         self.__password_valitation(password)
         self.username = username
         self.email = email
         self.password = generate_password_hash(password)
-        self.role = get_role(role)
+        self.role = role
         
     def verify_password (self, password: str):
         return check_password_hash(self.password, password)

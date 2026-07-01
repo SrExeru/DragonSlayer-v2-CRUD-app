@@ -1,22 +1,23 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from utils.db import db
 from models.user import User
-from utils.auth import login_required, logout_required, admin_required
-from utils.config import get_role, role_levels
+from utils.auth import login_required, logout_required, user_can
+from utils.config import Permissions
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/register', methods=['POST'])
-@admin_required
+@login_required
+@user_can('create_users')
 def register_user ():
     if request.method == 'POST':
         username = request.form.get('username')
         email = request.form.get('email')
         password = request.form.get('password')
-        role = get_role(request.form.get('role'))
+        role = request.form.get('role')
         
         try:
-            if role_levels[session['role']] <= role_levels[role]:
+            if Permissions.roles[session['role']].hierarchy > Permissions.roles[role].hierarchy:
                 raise ValueError('You cannot create users with a role higher than your own.')
             new_user = User(username, email, password, role)
             db.session.add(new_user)

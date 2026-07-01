@@ -1,6 +1,5 @@
 from utils.db import db
 from datetime import datetime
-from utils.config import get_priority
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key = True)
@@ -20,4 +19,4 @@ class Ticket(db.Model):
         self.author_id = author_id
         self.title = title
         self.description = description
-        self.priority = get_priority(priority)
+        self.priority = priority

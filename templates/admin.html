@@ -14,9 +14,9 @@
     <label for="role">Role</label>
     <select name="role" id="role" required>
         <option value="" selected hidden>Select</option>
-        {% for role in roles.keys() %}
-        {% if roles[role] < roles[session['role']] %}
-        <option value="{{ role }}">{{ role.capitalize().replace('_', ' ') }}</option>
+        {% for role in roles.values() %}
+        {% if roles[role.name].hierarchy > roles[session['role']].hierarchy %}
+        <option value="{{ role.name }}">{{ role }}</option>
         {% endif %}
         {% endfor %}
     </select>
@@ -40,20 +40,22 @@
     <h3>{{ user.username }}#{{ user.id }}</h3>
     <h4>{{ user.email }}</h4>
     <h5>{{ user.role.replace('_', ' ').capitalize() }}</h5>
-    {% if roles[session['role']] > roles[user.role] %}
-    <form action="{{ url_for('admin.edit_user', id = user.id) }}" method="POST">
+    <h5>{{ user.status.replace('_', ' ').capitalize() }}</h5>
+    {% if roles[session['role']].hierarchy < roles[user.role].hierarchy %}
+    <form action="{{ url_for('admin.edit_user') }}" method="POST">
+        <input type="hidden" name="id" value="{{ user.id }}">
         <label for="username">Username</label>
         <input type="text" name="username" id="edited_username" value="{{ user.username }}" required>
         <label for="email">email</label>
         <input type="email" name="email" id="edited_email" value="{{ user.email }}" required>
         
         <select name="role" id="edited_role" required>
-            {% for role in roles.keys() %}
-            {% if roles[role] < roles[session['role']] %}
-                {% if role == user.role %}
-                <option value="{{ role }}" selected>{{ role.capitalize().replace('_', ' ') }}</option>
+            {% for role in roles.values() %}
+            {% if roles[role.name].hierarchy > roles[session['role']].hierarchy %}
+                {% if role.name == user.role %}
+                <option value="{{ role.name }}" selected>{{ role }}</option>
                 {% else %}
-                <option value="{{ role }}">{{ role.capitalize().replace('_', ' ') }}</option>
+                <option value="{{ role.name }}">{{ role }}</option>
                 {% endif %}
             {% endif %}
             {% endfor %}
@@ -63,8 +65,25 @@
             Edit user
         </button>
     </form>
-    <form action="{{ url_for('admin.reset_password', id = user.id) }}" method="POST">
+    <form action="{{ url_for('admin.change_status') }}" method="POST">
+        <label for="status">Change status</label>
+        <input type="hidden" name="id" value="{{ user.id }}">
+        <select name="status" id="edited_status" required>
+            {% for status in status_levels.values() %}
+                {% if status.name == user.status %}
+                <option value="{{ status.name }}" selected>{{ status }}</option>
+                {% else %}
+                <option value="{{ status.name }}">{{ status }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>
+        <button>
+            Update status
+        </button>
+    </form>
+    <form action="{{ url_for('admin.reset_password') }}" method="POST">
         <label for="new_password">New password</label>
+        <input type="hidden" name="id" value="{{ user.id }}">
         <input type="password" name="password" id="new_password" required>
         <button>
             Reset password
