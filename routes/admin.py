@@ -21,12 +21,12 @@ def menu ():
         status_levels = Permissions.status
     )
 
-@admin.route('/edit', methods=['POST'])
+@admin.route('/edit/<id>', methods=['POST'])
 @login_required
 @user_can_affect('edit_user')
-def edit_user ():
+def edit_user (id):
     if request.method == 'POST':
-        user = db.session.query(User).filter_by(id = request.form.get('id')).first()
+        user = db.session.query(User).filter_by(id = id).first()
         edited_username = request.form.get('username')
         edited_email = request.form.get('email')
         edited_role = request.form.get('role')
@@ -40,12 +40,12 @@ def edit_user ():
             db.session.commit()
     return redirect(url_for('admin.menu'))
         
-@admin.route('/reset_password', methods=['POST'])
+@admin.route('/reset_password/<id>', methods=['POST'])
 @login_required
 @user_can_affect('reset_password')
-def reset_password ():
+def reset_password (id):
     if request.method == 'POST':
-        user = db.session.query(User).filter_by(id = request.form.get('id')).first()
+        user = db.session.query(User).filter_by(id = id).first()
         new_password = request.form.get('password')
 
         user.password = generate_password_hash(new_password)
@@ -53,12 +53,12 @@ def reset_password ():
                 
     return redirect(url_for('admin.menu'))
 
-@admin.route('/change_status', methods=['POST'])
+@admin.route('/change_status/<id>', methods=['POST'])
 @login_required
 @user_can_affect('edit_user')
-def change_status ():
+def change_status (id):
     if request.method == 'POST':
-        user = db.session.query(User).filter_by(id = request.form.get('id')).first()
+        user = db.session.query(User).filter_by(id = id).first()
         
         user.status = request.form.get('status')
         db.session.commit()

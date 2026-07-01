@@ -72,10 +72,9 @@ class TicketPriority:
         return self.name.capitalize().replace('_', ' ')
         
 class TicketStatus:
-    def __init__(self, name: str, color: str, finished: bool = False):
+    def __init__(self, name: str, color: str):
         self.name = name
         self.color = color
-        self.finished = finished
         TicketManagment.status[name] = self
     
     def __str__(self):
@@ -117,9 +116,8 @@ UserStatus(
 )
 
 UserStatus(
-    'suspended',
-    'login', 'edit_self', 
-    'read_tickets'
+    'suspended', 
+    'read_tickets',
     'create_users', 'edit_users', 'reset_password', 'delete_users'
 )
 
@@ -159,6 +157,5 @@ TicketStatus(
 
 TicketStatus(
     'finished',
-    '#30323d',
-    finished = True
+    '#30323d'
 )

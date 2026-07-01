@@ -42,7 +42,7 @@
     <h5>{{ user.role.replace('_', ' ').capitalize() }}</h5>
     <h5>{{ user.status.replace('_', ' ').capitalize() }}</h5>
     {% if roles[session['role']].hierarchy < roles[user.role].hierarchy %}
-    <form action="{{ url_for('admin.edit_user') }}" method="POST">
+    <form action="{{ url_for('admin.edit_user', id = user.id) }}" method="POST">
         <input type="hidden" name="id" value="{{ user.id }}">
         <label for="username">Username</label>
         <input type="text" name="username" id="edited_username" value="{{ user.username }}" required>
@@ -65,7 +65,7 @@
             Edit user
         </button>
     </form>
-    <form action="{{ url_for('admin.change_status') }}" method="POST">
+    <form action="{{ url_for('admin.change_status', id = user.id) }}" method="POST">
         <label for="status">Change status</label>
         <input type="hidden" name="id" value="{{ user.id }}">
         <select name="status" id="edited_status" required>
@@ -81,7 +81,7 @@
             Update status
         </button>
     </form>
-    <form action="{{ url_for('admin.reset_password') }}" method="POST">
+    <form action="{{ url_for('admin.reset_password', id = user.id) }}" method="POST">
         <label for="new_password">New password</label>
         <input type="hidden" name="id" value="{{ user.id }}">
         <input type="password" name="password" id="new_password" required>

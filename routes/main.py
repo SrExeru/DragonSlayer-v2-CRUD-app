@@ -15,5 +15,6 @@ def home ():
         'dashboard.html',
         title = 'Dashboard',
         tickets = reversed(db.session.query(Ticket).all()),
-        priority_levels = TicketManagment.priorities
+        priority_levels = TicketManagment.priorities,
+        status_levels = TicketManagment.status
     )

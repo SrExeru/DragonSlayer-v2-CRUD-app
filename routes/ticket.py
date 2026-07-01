@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, url_for, redirect, request, session
+from flask import Blueprint, render_template, url_for, redirect, request, session, abort
 from utils.auth import login_required, user_can
 from utils.db import db
 from models.user import User
@@ -15,8 +15,9 @@ def create ():
         title = request.form.get('title')
         description = request.form.get('description')
         priority = request.form.get('priority')
+        status = request.form.get('status')
         
-        new_ticket = Ticket(author_id, title, description, priority)
+        new_ticket = Ticket(author_id, title, description, priority, status)
         
         db.session.add(new_ticket)
         db.session.commit()
@@ -31,8 +32,10 @@ def create ():
 def edit (id):
     if request.method == 'POST':
         ticket = db.session.query(Ticket).filter_by(id = id).first()
+        if ticket.finished:
+            abort(403)
         if ticket is None:
-            return redirect(url_for('main.home'))
+            abort(404)
         else:
             ticket.title = request.form.get('title')
             ticket.description = request.form.get('description')
@@ -48,12 +51,12 @@ def edit (id):
 def finish (id):
     if request.method == 'POST':
         ticket = db.session.query(Ticket).filter_by(id = id).first()
+        if ticket.status == 'finished':
+            abort(403)
         if ticket is None:
-            return redirect(url_for('main.home'))
+            abort(404)
         else:
-            ticket.conclution = request.form.get('conclution')
-            ticket.finished = True
-            
+            ticket.finish(request.form.get('conclution'))
             db.session.commit()
     
     return redirect(url_for('main.home'))
