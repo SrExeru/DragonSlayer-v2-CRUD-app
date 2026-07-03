@@ -21,7 +21,7 @@ def menu ():
     
 @admin.route('/register', methods=['POST'])
 @login_required
-@user_can('create_users')
+@user_can('create_user')
 def register_user ():
     if request.method == 'POST':
         username = request.form.get('username')

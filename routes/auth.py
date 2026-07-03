@@ -33,5 +33,5 @@ def login_user ():
 @auth.route('/logout')
 @login_required
 def logout_user ():
-    session.pop('role')
+    session.clear()
     return redirect(url_for('auth.login_user'))
