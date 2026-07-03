@@ -118,7 +118,7 @@ UserStatus(
 UserStatus(
     'suspended', 
     'read_tickets',
-    'create_users', 'edit_users', 'reset_password', 'delete_users'
+    'create_user', 'edit_user', 'reset_password', 'delete_user'
 )
 
 UserStatus(
@@ -159,3 +159,13 @@ TicketStatus(
     'finished',
     '#30323d'
 )
+
+def logged_show (html_name: str, **kwargs):
+    from flask import session, render_template
+    from utils.db import db
+    from models.user import User
+    return render_template(
+        html_name,
+        **kwargs,
+        user = db.session.query(User).filter_by(id = session['id']).first(),
+    )

@@ -3,7 +3,9 @@
 {% block content %}
 <h1>Admin panel</h1>
 
-<form action="{{ url_for('auth.register_user') }}" method="POST">
+{% if user.can('create_user') %}
+
+<form action="{{ url_for('admin.register_user') }}" method="POST">
     <h2>New user</h2>
     <label for="username">username</label>
     <input type="text" name="username" id="username" required>
@@ -14,8 +16,8 @@
     <label for="role">Role</label>
     <select name="role" id="role" required>
         <option value="" selected hidden>Select</option>
-        {% for role in roles.values() %}
-        {% if roles[role.name].hierarchy > roles[session['role']].hierarchy %}
+        {% for role in Permissions.roles.values() %}
+        {% if Permissions.roles[role.name].hierarchy > Permissions.roles[user.role].hierarchy %}
         <option value="{{ role.name }}">{{ role }}</option>
         {% endif %}
         {% endfor %}
@@ -33,26 +35,28 @@
         {% endif %}
     {% endwith %}
 </form>
+{% endif %}
+
 
 <div class="user_container">
-{% for user in users %}
+{% for showed_user in users %}
 <div class="user_card">
-    <h3>{{ user.username }}#{{ user.id }}</h3>
-    <h4>{{ user.email }}</h4>
-    <h5>{{ user.role.replace('_', ' ').capitalize() }}</h5>
-    <h5>{{ user.status.replace('_', ' ').capitalize() }}</h5>
-    {% if roles[session['role']].hierarchy < roles[user.role].hierarchy %}
-    <form action="{{ url_for('admin.edit_user', id = user.id) }}" method="POST">
-        <input type="hidden" name="id" value="{{ user.id }}">
+    <h3>{{ showed_user.username }}#{{ showed_user.id }}</h3>
+    <h4>{{ showed_user.email }}</h4>
+    <h5>{{ Permissions.roles[showed_user.role] }}</h5>
+    <h5>{{ Permissions.status[showed_user.status] }}</h5>
+    {% if user.can('edit_user') and Permissions.roles[user.role].hierarchy < Permissions.roles[showed_user.role].hierarchy %}
+    <form action="{{ url_for('admin.edit_user', id = showed_user.id) }}" method="POST">
+        <input type="hidden" name="id" value="{{ showed_user.id }}">
         <label for="username">Username</label>
-        <input type="text" name="username" id="edited_username" value="{{ user.username }}" required>
+        <input type="text" name="username" id="edited_username" value="{{ showed_user.username }}" required>
         <label for="email">email</label>
-        <input type="email" name="email" id="edited_email" value="{{ user.email }}" required>
+        <input type="email" name="email" id="edited_email" value="{{ showed_user.email }}" required>
         
         <select name="role" id="edited_role" required>
-            {% for role in roles.values() %}
-            {% if roles[role.name].hierarchy > roles[session['role']].hierarchy %}
-                {% if role.name == user.role %}
+            {% for role in Permissions.roles.values() %}
+            {% if Permissions.roles[role.name].hierarchy > Permissions.roles[user.role].hierarchy %}
+                {% if role.name == showed_user.role %}
                 <option value="{{ role.name }}" selected>{{ role }}</option>
                 {% else %}
                 <option value="{{ role.name }}">{{ role }}</option>
@@ -65,12 +69,12 @@
             Edit user
         </button>
     </form>
-    <form action="{{ url_for('admin.change_status', id = user.id) }}" method="POST">
+    <form action="{{ url_for('admin.change_status', id = showed_user.id) }}" method="POST">
         <label for="status">Change status</label>
         <input type="hidden" name="id" value="{{ user.id }}">
         <select name="status" id="edited_status" required>
-            {% for status in status_levels.values() %}
-                {% if status.name == user.status %}
+            {% for status in Permissions.status.values() %}
+                {% if status.name == showed_user.status %}
                 <option value="{{ status.name }}" selected>{{ status }}</option>
                 {% else %}
                 <option value="{{ status.name }}">{{ status }}</option>
@@ -81,9 +85,8 @@
             Update status
         </button>
     </form>
-    <form action="{{ url_for('admin.reset_password', id = user.id) }}" method="POST">
+    <form action="{{ url_for('admin.reset_password', id = showed_user.id) }}" method="POST">
         <label for="new_password">New password</label>
-        <input type="hidden" name="id" value="{{ user.id }}">
         <input type="password" name="password" id="new_password" required>
         <button>
             Reset password

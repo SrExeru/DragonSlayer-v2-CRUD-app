@@ -6,29 +6,6 @@ from utils.config import Permissions
 
 auth = Blueprint('auth', __name__)
 
-@auth.route('/register', methods=['POST'])
-@login_required
-@user_can('create_users')
-def register_user ():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        email = request.form.get('email')
-        password = request.form.get('password')
-        role = request.form.get('role')
-        
-        try:
-            if Permissions.roles[session['role']].hierarchy > Permissions.roles[role].hierarchy:
-                raise ValueError('You cannot create users with a role higher than your own.')
-            new_user = User(username, email, password, role)
-            db.session.add(new_user)
-            db.session.commit()
-            return redirect(url_for('admin.menu'))
-        except ValueError as e:
-            flash(str(e), 'error')
-            return redirect(url_for('admin.menu'))
-    
-    return redirect(url_for('admin.menu'))
-
 @auth.route('/login', methods=['POST', 'GET'])
 @logout_required
 def login_user ():
@@ -41,9 +18,14 @@ def login_user ():
                 title = 'Login',
                 error = 'incorrect email or password.'
             )
+        elif user.status == 'inactive':
+            return render_template(
+                'login.html',
+                title = 'Login',
+                error = 'inactive user.'
+            )
         else:
             session['id'] = user.id
-            session['role'] = user.role
             return redirect(url_for('main.home'))
         
     return render_template('login.html', title='Login')
@@ -51,5 +33,5 @@ def login_user ():
 @auth.route('/logout')
 @login_required
 def logout_user ():
-    session.pop('id')
+    session.pop('role')
     return redirect(url_for('auth.login_user'))

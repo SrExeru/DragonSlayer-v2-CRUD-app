@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ style }}">
     <title>DragonSlayer | {{ title }}</title>
 </head>
 <body>
@@ -13,16 +14,30 @@
             <h2>DragonSlayer</h2>
         </div>
         <nav>
-            {% if session.get('role') in ['owner', 'administrator'] %}
-            <a href="{{ url_for('admin.menu') }}">Admin</a>
-            {% endif %}
-            {% if session.get('id') %}
-            <a href="{{ url_for('main.home') }}">Dashboard</a>
-            <a href="{{ url_for('profile.settings') }}">Profile</a>
-            <a href="{{ url_for('auth.logout_user') }}">Logout</a>
-            {% else %}
-            <a href="{{ url_for('auth.login_user') }}">Login</a>
-            {% endif %}
+            <button id="btn_menu" onclick="showMenu()">
+                <svg id="btn_menu_close" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                </svg>
+                <svg id="btn_menu_open" class="hide_btn" cl xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                </svg>
+            </button>
+            <ul id="nav_options" class="nav_options hide_menu" aria-expanded="false">
+                {% if logged %}
+                    {% if user.can('access_admin') %}
+                    <a href="{{ url_for('admin.menu') }}">Admin</a>
+                    {% endif %}
+                    {% if user.can('read_tickets') %}
+                    <a href="{{ url_for('main.home') }}">Dashboard</a>
+                    {% endif %}
+                    {% if user.can('edit_self') %}
+                    <a href="{{ url_for('profile.settings') }}">Profile</a>
+                    {% endif %}
+                    <a href="{{ url_for('auth.logout_user') }}">Logout</a>
+                {% else %}
+                    <a href="{{ url_for('auth.login_user') }}">Login</a>
+                {% endif %}
+            </ul>
         </nav>
     </header>
     <main>
@@ -34,13 +49,14 @@
             Esto es un footer
         </p>
         <p>
-            En algun momento tocara rehacer todos los html puesto que
-            solo estan <br>hechos para ver que la informacion de la base de datos si
-            se pase... PTM
+            Informacion
         </p>
         <p>
             No importa lo que pase, sigue siendo un footer
         </p>
     </footer>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    {% block script %}
+    {% endblock %}
 </body>
 </html>

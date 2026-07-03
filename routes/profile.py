@@ -3,17 +3,16 @@ from utils.db import db
 from utils.auth import login_required, user_can
 from models.user import User
 from werkzeug.security import generate_password_hash
+from utils.config import logged_show
 
 profile = Blueprint('profile', __name__, url_prefix='/profile')
 
 @profile.route('/', methods=['POST', 'GET'])
 @login_required
 def settings ():
-    user = db.session.query(User).filter_by(id = session['id']).first()
-    return render_template(
+    return logged_show(
         'settings.html',
-        title = 'Profile',
-        user = user
+        title = 'Profile'
     )
     
 @profile.route('/change_username', methods=['POST'])

@@ -1,20 +1,20 @@
 from flask import Blueprint, render_template, redirect, session, url_for
-from utils.auth import login_required
+from utils.auth import login_required, user_can
 from utils.db import db
 from models.user import User
 from models.ticket import Ticket
-from utils.config import TicketManagment
+from utils.config import TicketManagment, logged_show
 
 main = Blueprint('main', __name__)
 
 @main.route('/')
 @login_required
+@user_can('read_tickets')
 def home ():
-    user = db.session.query(User).filter_by(id = session['id']).first()
-    return render_template(
+    return logged_show(
         'dashboard.html',
         title = 'Dashboard',
-        tickets = reversed(db.session.query(Ticket).all()),
-        priority_levels = TicketManagment.priorities,
-        status_levels = TicketManagment.status
+        style = url_for('static', filename = 'css/tickets.css'),
+        tickets = reversed(db.session.query(Ticket).all())
     )
+    

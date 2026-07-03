@@ -32,7 +32,7 @@ def create ():
 def edit (id):
     if request.method == 'POST':
         ticket = db.session.query(Ticket).filter_by(id = id).first()
-        if ticket.finished:
+        if ticket.status == 'finished':
             abort(403)
         if ticket is None:
             abort(404)

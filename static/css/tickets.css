@@ -1,0 +1,90 @@
+.ticket_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 30vh;
+    gap: 10px;
+}
+
+.ticket_controls {
+    padding: 5px 10px 10px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket_controls button {
+    display: flex;
+    width: 130px;
+    height: 50px;
+    background-color: #30323d;
+    border-radius: 10px;
+    color: #fff;
+    text-align: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    transition: all 0.3s ease-in;
+}
+
+.ticket_controls button span {
+    text-align: right;
+}
+
+.ticket_controls button:hover {
+    cursor: pointer;
+    background-color: #424554;
+}
+
+.ticket_controls form {
+    display: flex;
+    gap: 10px;
+}
+
+.ticket_controls form select {
+    width: 130px;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 0 12px;
+    border: 1px solid #30323d;
+}
+
+.ticket_modal {
+    margin: auto;
+    width: 80vw;
+    height: 85vh;
+    padding: 10px 10px 20px 20px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 5px #0006;
+}
+
+.ticket_modal .modal_sup {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-bottom: 1px solid #30323d;
+    align-items: center;
+}
+
+.ticket_modal .modal_sup button {
+    background: none;
+    border: none;
+    color: #30323d;
+}
+
+.ticket_modal .modal_sup button:hover {
+    cursor: pointer;
+}
+
+.ticket_modal form {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.ticket_card {
+    border: 1px solid #30323d;
+}
