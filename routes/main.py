@@ -15,6 +15,7 @@ def home ():
         'dashboard.html',
         title = 'Dashboard',
         style = url_for('static', filename = 'css/tickets.css'),
+        script = url_for('static', filename = 'js/dashboard.js'),
         tickets = reversed(db.session.query(Ticket).all())
     )
     

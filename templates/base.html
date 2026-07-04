@@ -46,17 +46,17 @@
     </main>
     <footer>
         <p>
-            Esto es un footer
+            DragonSlayer <i>v.2</i><br>
+            By <a href="https://github.com/SrExeru">SrExeru</a>
         </p>
         <p>
-            Informacion
-        </p>
-        <p>
-            No importa lo que pase, sigue siendo un footer
+            Dragon slayer logo from <a href="https://www.flaticon.es/iconos-gratis/monstruo" title="monstruo iconos">Flaticon</a> <br>
+            Other icons from <a href="https://icons.getbootstrap.com/">bootstrap</a>
         </p>
     </footer>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-    {% block script %}
-    {% endblock %}
+    {% if script %}
+    <script src="{{ script }}"></script>
+    {% endif %}
 </body>
 </html>

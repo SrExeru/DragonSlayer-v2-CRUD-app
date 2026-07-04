@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <h1>Tickets</h1>
 {% if user.can('create_ticket') %}
 <dialog class="ticket_modal" id="create_ticket">
@@ -17,26 +16,83 @@
         </button>
     </div>
 <form action="{{ url_for('ticket.create') }}" method="POST">
-    <label for="title">Title</label>
-    <input type="text" name="title" placeholder="Ticket" required>
-    <label for="description">Description</label>
-    <textarea name="description" id="description" placeholder="This ticket is about..."></textarea>
-    <label for="priority">Priority</label>
-    <select name="priority" id="priority" required>
-        <option value="" selected hidden>Select</option>
-        {% for level in TicketManagment.priorities.values() %}
-            <option value="{{ level.name }}">{{ level }}</option>
-        {% endfor %}
-    </select>
-    <label for="status">Status</label>
-    <select name="status" id="status" required>
-        <option value="" selected hidden>Select</option>
-        {% for level in TicketManagment.status.values() %}
-            <option value="{{ level.name }}">{{ level }}</option>
-        {% endfor %}
-    </select>
+    <div class="modal_question">
+        <label for="title">Title</label>
+        <input type="text" name="title" placeholder="Ticket" required>
+    </div>
+    <div class="modal_question">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" placeholder="This ticket is about..."></textarea>
+    </div>
+    <div class="modal_details">
+        <div class="modal_question">
+            <label for="priority">Priority</label>
+            <select name="priority" id="priority" required>
+                <option value="" selected hidden>Select</option>
+                {% for level in TicketManagment.priorities.values() %}
+                    <option value="{{ level.name }}">{{ level }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="modal_question">
+            <label for="status">Status</label>
+            <select name="status" id="status" required>
+                <option value="" selected hidden>Select</option>
+                {% for level in TicketManagment.status.values() %}
+                    <option value="{{ level.name }}">{{ level }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
     <button>
-        Create board
+        Create ticket
+    </button>
+</form>
+</dialog>
+{% endif %}
+
+{% if user.can('edit_ticket') %}
+<dialog class="ticket_modal" id="edit_ticket">
+    <div class="modal_sup">
+        <h2>
+            Edit ticket
+        </h2>
+        <button onclick="document.getElementById('edit_ticket').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+            </svg>
+        </button>
+    </div>
+<form action="{{ url_for('ticket.edit') }}" method="POST">
+    <input id="id_edit" type="hidden" name="id" value="0">
+    <div class="modal_question">
+        <label for="title">Title</label>
+        <input id="title_edit" type="text" name="title" placeholder="Ticket" required>
+    </div>
+    <div class="modal_question">
+        <label for="description">Description</label>
+        <textarea name="description" id="description_edit" placeholder="This ticket is about..."></textarea>
+    </div>
+    <div class="modal_details">
+        <div class="modal_question">
+            <label for="priority_edit">Priority</label>
+            <select name="priority" id="priority_edit" required>
+                {% for level in TicketManagment.priorities.values() %}
+                    <option value="{{ level.name }}">{{ level }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="modal_question">
+            <label for="status">Status</label>
+            <select name="status" id="status_edit" required>
+                {% for level in TicketManagment.status.values() %}
+                    <option value="{{ level.name }}">{{ level }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <button>
+        Edit ticket
     </button>
 </form>
 </dialog>
@@ -65,7 +121,7 @@
             </span>
         </button>
     </form>
-    <button onclick="document.getElementById('create_ticket').showModal()">
+    <button id="btn_create_ticket" onclick="document.getElementById('create_ticket').showModal()">
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-plus-square" viewBox="0 0 16 16">
             <path d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2z"/>
             <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4"/>
@@ -79,17 +135,44 @@
 <div class="ticket_container">
     {% for ticket in tickets %}
         <div class="ticket_card">
-            <h4 style="background-color: {{ TicketManagment.priorities[ticket.priority].color }};">{{ ticket.title }}</h4>
-            <p>{{ ticket.description }}</p>
-            <span>{{ ticket.author.username }}</span> <br>
-            <span>{{ ticket.status.capitalize().replace('_', ' ') }}</span> <br>
-            <span>{{ ticket.created_at }}</span>
+            <h4 style="border-bottom: 2px solid {{ TicketManagment.priorities[ticket.priority].color }};">{{ ticket.title }}</h4>
             
-            {% if ticket.status == 'finished' %}
-                <h5>Conclution</h5>
-                <p>{{ ticket.conclution }}<br><span>{{ ticket.finished_at }}</span></p>
-            {% endif %}
+            <div class="ticket_info">
+                <p class="ticket_info_top">{{ ticket.description }}</p>
+                
+                
+                {% if ticket.status == 'finished' %}
+                    <h5>Conclution</h5>
+                    <p>{{ ticket.conclution }}<br><span>{{ ticket.finished_at }}</span></p>
+                {% endif %}
+                <p class="ticket_info_bottom">
+                    <span>{{ ticket.author.username }}</span>
+                    <time datetime="{{ ticket.created_at }}">{{ ticket.created_at.strftime('%d-%m-%Y')  }}</time>
+                </p>
+            </div>
 
+            <div class="ticket_tools">
+                <div class="ticket_status">
+                    <div class="status_circle" style="background-color: {{ TicketManagment.status[ticket.status].color }};">
+                    </div>
+                    <span>
+                        {{ ticket.status.capitalize().replace('_', ' ') }}
+                    </span>
+                </div>
+                <div>
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
+                        </svg>
+                    </button>
+                    <button onclick="editTicket({{ticket.id}})">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     {% endfor %}
 </div>

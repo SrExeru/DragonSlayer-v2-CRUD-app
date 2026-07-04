@@ -110,6 +110,11 @@ footer {
     min-height: 10vh;
 }
 
+footer a {
+    color: #fff;
+    font-weight: bold;
+}
+
 /* RESPONSIVE */
 
 @media (max-width: 800px) {

@@ -1,8 +1,8 @@
 .ticket_container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-auto-rows: 30vh;
-    gap: 10px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 47vh;
+    gap: 20px;
 }
 
 .ticket_controls {
@@ -25,6 +25,7 @@
     font-size: 16px;
     font-weight: bold;
     border: none;
+    box-shadow: 0 0 5px 1px #0005;
     transition: all 0.3s ease-in;
 }
 
@@ -82,9 +83,217 @@
     display: flex;
     width: 100%;
     flex-direction: column;
-    gap: 10px;
+}
+
+.modal_question {
+    display: flex;
+    padding: 10px 20px;
+    flex-direction: column;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+
+.modal_question input {
+    height: 42px;
+    font-size: 18px;
+    padding: 15px 10px 5px;
+    border: none;
+    border-bottom: 1px solid #30323d;
+    transition: all .3s ease;
+}
+
+.modal_question input:focus {
+    outline: none;
+    background-color: #eee;
+    border-bottom: 2px solid #30323d;
+}
+
+.modal_question textarea {
+    box-sizing: border-box;
+    resize: none;
+    height: 140px;
+    font-size: 18px;
+    padding: 5px 10px;
+    border: 1px solid #30323d;
+    border-radius: 10px;
+    background-color: #eee;
+    transition: all .3s ease;
+}
+
+.modal_question textarea:focus {
+    outline: 1px solid #30323d;
+}
+
+.modal_details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 80px;
+}
+
+.modal_question select {
+    border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    padding-left: 15px;
+}
+
+.ticket_modal form button {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 15px auto;
+    width: 200px;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0 0 10px 0 #0006;
+    background: linear-gradient(to top, #4e855e, #63a375);
+    color: #fff;
+}
+
+.ticket_modal form button:hover {
+    cursor: pointer;
 }
 
 .ticket_card {
-    border: 1px solid #30323d;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 1px #0005;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ticket_card h4 {
+    border-radius: 10px 10px 0 0;
+    height: 20%;
+    padding: 10px 20px;
+    background-color: #30323d;
+    color: #fff;
+}
+
+.ticket_info {
+    height: 70%;
+    padding: 10px 20px;
+}
+
+.ticket_info_top {
+    height: 90%;
+}
+
+.ticket_info_bottom {
+    display: flex;
+    justify-content: space-between;
+    height: 10%;
+}
+
+.ticket_tools {
+    display: flex;
+    height: 10%;
+    justify-content: space-between;
+    background-color: #30323d;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 10px;
+}
+
+.ticket_tools div {
+    font-style: italic;
+    display: flex;
+    color: #fff;
+    gap: 10px;
+    align-items: center;
+}
+
+.ticket_tools .status_circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+.ticket_tools button {
+    color: #fff;
+    background: none;
+    border: none;
+}
+
+.ticket_tools button:hover {
+    cursor: pointer;
+}
+
+@media (max-width: 1200px) {
+    .ticket_container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1000px) {
+    .ticket_container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 800px) {
+    .ticket_info {
+        height: 65%;
+    }
+
+    .ticket_tools {
+        height: 15%;
+        font-size: 26px;
+        padding-top: 10px;
+    }
+
+    .ticket_tools .status_circle {
+        width: 15px;
+        height: 15px;
+    }
+
+    .ticket_tools button svg {
+        height: 36px;
+        width: 36px;
+    }
+    .ticket_container {
+        grid-template-columns: 1fr;
+    }
+    .ticket_controls button {
+        width: 50px;
+    }
+
+    .ticket_controls button span {
+        display: none;
+    }
+}
+
+@media (max-width: 500px) {
+    .ticket_container {
+        grid-auto-rows: 60vh;
+    }
+
+    .ticket_card h4 {
+        font-size: 20px;
+    }
+
+    .ticket_controls form {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: 1fr 1fr;
+    }
+
+    .ticket_controls form select {
+        width: 100%
+    }
+
+    .ticket_controls form button {
+        grid-row: 1 / -1;
+        grid-column: 2;
+    }
+
+    #btn_create_ticket {
+        position: fixed;
+        bottom: 12vh;
+        right: 3vw;
+        z-index: 1100;
+    }
 }
