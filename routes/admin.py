@@ -16,6 +16,7 @@ def menu ():
     return logged_show(
         'admin.html',
         title = 'Panel',
+        style = url_for('static', filename = 'css/admin.css'),
         users = users
     )
     

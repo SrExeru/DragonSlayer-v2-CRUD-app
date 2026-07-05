@@ -12,7 +12,8 @@ profile = Blueprint('profile', __name__, url_prefix='/profile')
 def settings ():
     return logged_show(
         'settings.html',
-        title = 'Profile'
+        title = 'Profile',
+        style = url_for('static', filename = 'css/profile.css')
     )
     
 @profile.route('/change_username', methods=['POST'])

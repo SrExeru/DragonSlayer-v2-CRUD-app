@@ -1,3 +1,12 @@
+main {
+    border-radius: 10px;
+    padding: 15px 20px;
+    padding-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px 5px #0006;
+}
+
+
 .ticket_container {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -176,6 +185,12 @@
     justify-content: space-between;
 }
 
+.ticket_card p {
+    line-break: auto;
+    overflow-y: auto;
+    white-space: pre-line;
+}
+
 .ticket_card h4 {
     border-radius: 10px 10px 0 0;
     height: 20%;
@@ -193,7 +208,7 @@
 }
 
 .ticket_info_top {
-    height: 90%;
+    height: 75%;
 }
 
 .ticket_info_bottom {
