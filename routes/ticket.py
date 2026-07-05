@@ -64,11 +64,12 @@ def edit ():
     
     return redirect(url_for('main.home'))
 
-@ticket.route('/finish/<id>', methods=['POST'])
+@ticket.route('/finish', methods=['POST'])
 @login_required
-@user_can('conclude_ticket')
-def finish (id):
+@user_can('edit_ticket')
+def finish ():
     if request.method == 'POST':
+        id = request.form.get('id')
         ticket = db.session.query(Ticket).filter_by(id = id).first()
         if ticket.status == 'finished':
             abort(403)

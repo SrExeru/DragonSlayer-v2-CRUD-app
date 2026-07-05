@@ -2,7 +2,7 @@
 
 PERMISSIONS = [
     'login', 'edit_self', # Manage account system
-    'read_tickets', 'create_ticket', 'edit_ticket', 'conclude_ticket', # Ticket system
+    'read_tickets', 'create_ticket', 'edit_ticket', # Ticket system
     'access_admin', 'create_user', 'edit_user', 'reset_password', 'delete_user' # Admin system
 ]
 
@@ -99,7 +99,7 @@ UserRole(
     'default',
     2,
     'login', 'edit_self',
-    'read_tickets', 'create_tickets', 'edit_tickets', 'conclude_tickets'
+    'read_tickets', 'create_tickets', 'edit_tickets'
 )
 
 UserRole(

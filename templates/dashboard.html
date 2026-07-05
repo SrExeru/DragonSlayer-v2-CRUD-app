@@ -96,18 +96,44 @@
     </button>
 </form>
 </dialog>
+
+<dialog class="ticket_modal" id="conclude_ticket">
+    <div class="modal_sup">
+        <h2>
+            Conclude ticket
+        </h2>
+        <button onclick="document.getElementById('conclude_ticket').close()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+            </svg>
+        </button>
+    </div>
+    <form action="{{ url_for('ticket.finish') }}" method="POST">
+        <input id="id_conclude" type="hidden" name="id" value="0">
+        <h3 id="title_ticket_conclution"></h3>
+        <p id="description_ticket_conclution"></p>
+        <div class="modal_question">
+            <label for="description">Conclution</label>
+            <textarea name="conclution" id="ticket_conclution" placeholder="The problem was solved..."></textarea>
+        </div>
+        
+        <button>
+            Conclude ticket
+        </button>
+    </form>
+</dialog>
 {% endif %}
 
 <div class="ticket_controls">
     <form>
         <select name="priority" id="priority" required>
-            <option value="" selected hidden>Select</option>
+            <option value="" selected hidden>Priority</option>
             {% for level in TicketManagment.priorities.values() %}
                 <option value="{{ level.name }}">{{ level }}</option>
             {% endfor %}
         </select>
         <select name="status" id="status" required>
-            <option value="" selected hidden>Select</option>
+            <option value="" selected hidden>Status</option>
             {% for level in TicketManagment.status.values() %}
                 <option value="{{ level.name }}">{{ level }}</option>
             {% endfor %}
@@ -134,7 +160,11 @@
 
 <div class="ticket_container">
     {% for ticket in tickets %}
+        {% if ticket.status == 'finished' %}
+        <div class="ticket_card  concluted">
+        {% else %}
         <div class="ticket_card">
+        {% endif %}
             <h4 style="border-bottom: 2px solid {{ TicketManagment.priorities[ticket.priority].color }};">{{ ticket.title }}</h4>
             
             <div class="ticket_info">
@@ -142,8 +172,10 @@
                 
                 
                 {% if ticket.status == 'finished' %}
+                <div class="ticket_conclution">
                     <h5>Conclution</h5>
-                    <p>{{ ticket.conclution }}<br><span>{{ ticket.finished_at }}</span></p>
+                    <p>{{ ticket.conclution }}<br><span>{{ ticket.finished_at.strftime('%d-%m-%Y') }}</span></p>
+                </div>
                 {% endif %}
                 <p class="ticket_info_bottom">
                     <span>{{ ticket.author.username }}</span>
@@ -160,7 +192,8 @@
                     </span>
                 </div>
                 <div>
-                    <button>
+                    {% if ticket.status != 'finished' %}
+                    <button onclick="concludeTicket({{ticket.id}})">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
                             <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0"/>
                         </svg>
@@ -171,6 +204,7 @@
                             <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                         </svg>
                     </button>
+                    {% endif %}
                 </div>
             </div>
         </div>

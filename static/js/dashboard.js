@@ -31,3 +31,17 @@ async function editTicket (id) {
     priority.selected = true;
     status.selected = true
 };
+
+async function concludeTicket (id) {
+    let ticket = await obtainTicket(id);
+    let modal = document.getElementById('conclude_ticket');
+    modal.showModal();  
+
+    let t_id = document.getElementById('id_conclude');
+    let title = document.getElementById('title_ticket_conclution');
+    let description = document.getElementById('description_ticket_conclution');
+
+    t_id.value = ticket.id
+    title.textContent = ticket.title;
+    description.textContent = ticket.description;
+};

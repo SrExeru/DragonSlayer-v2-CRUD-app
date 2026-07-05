@@ -141,7 +141,8 @@
 .ticket_modal form button {
     font-size: 18px;
     font-weight: bold;
-    margin: 15px auto;
+    margin: 20px auto;
+    margin-bottom: 0;
     width: 200px;
     height: 50px;
     border-radius: 10px;
@@ -153,6 +154,16 @@
 
 .ticket_modal form button:hover {
     cursor: pointer;
+}
+
+#title_ticket_conclution {
+    font-size: 30px;
+    margin: 10px;
+}
+
+#description_ticket_conclution {
+    margin: 20px;
+    height: 20vh;
 }
 
 .ticket_card {
@@ -174,6 +185,9 @@
 }
 
 .ticket_info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 70%;
     padding: 10px 20px;
 }
@@ -219,6 +233,16 @@
 
 .ticket_tools button:hover {
     cursor: pointer;
+}
+
+.concluted .ticket_info_top {
+    height: 40%;
+}
+
+.ticket_conclution {
+    padding: 10px 15px;
+    border: 1px solid #30323d;
+    border-radius: 10px;
 }
 
 @media (max-width: 1200px) {
@@ -282,7 +306,7 @@
     }
 
     .ticket_controls form select {
-        width: 100%
+        width: 100%;
     }
 
     .ticket_controls form button {
@@ -292,8 +316,18 @@
 
     #btn_create_ticket {
         position: fixed;
-        bottom: 12vh;
+        bottom: 3vw;
         right: 3vw;
         z-index: 1100;
+        width: 60px;
+        height: 60px;
+    }
+
+    .modal_details {
+        display: block;
+    }
+    
+    .modal_details select {
+        height: 5vh;
     }
 }
