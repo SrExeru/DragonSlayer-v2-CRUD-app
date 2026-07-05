@@ -2,6 +2,46 @@
 
 {% block content %}
 
+{% if user.can('edit_user') %}
+<dialog>
+    <form action="{{ url_for('admin.edit_user') }}" method="POST">
+        <input type="hidden" name="id" value="0">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="edited_username" required>
+        <label for="email">email</label>
+        <input type="email" name="email" id="edited_email" required>
+            
+        <select name="role" id="edited_role" required>
+            {% for role in Permissions.roles.values() %}
+                <option value="{{ role.name }}">{{ role }}</option>
+            {% endfor %}
+        </select>
+            
+        <button>
+            Edit user
+        </button>
+    </form>
+    <form action="{{ url_for('admin.change_status') }}" method="POST">
+        <label for="status">Change status</label>
+        <input type="hidden" name="id" value="0">
+        <select name="status" id="edited_status" required>
+            {% for status in Permissions.status.values() %}
+                <option value="{{ status.name }}">{{ status }}</option>
+            {% endfor %}
+        </select>
+        <button>
+            Update status
+        </button>
+    </form>
+    <form action="{{ url_for('admin.reset_password') }}" method="POST">
+        <label for="new_password">New password</label>
+        <input type="password" name="password" id="new_password" required>
+        <button>
+            Reset password
+        </button>
+    </form>
+</dialog>
+{% endif %}
 
 <div class="users">
     <h1>Admin panel</h1>
@@ -39,63 +79,31 @@
     </form>
     {% endif %}
 
-    div class="user_container">
-    {% for showed_user in users %}
-    <div class="user_card">
-        <h3>{{ showed_user.username }}#{{ showed_user.id }}</h3>
-        <h4>{{ showed_user.email }}</h4>
-        <h5>{{ Permissions.roles[showed_user.role] }}</h5>
-        <h5>{{ Permissions.status[showed_user.status] }}</h5>
-        {% if user.can('edit_user') and Permissions.roles[user.role].hierarchy < Permissions.roles[showed_user.role].hierarchy %}
-        <form action="{{ url_for('admin.edit_user', id = showed_user.id) }}" method="POST">
-            <input type="hidden" name="id" value="{{ showed_user.id }}">
-            <label for="username">Username</label>
-            <input type="text" name="username" id="edited_username" value="{{ showed_user.username }}" required>
-            <label for="email">email</label>
-            <input type="email" name="email" id="edited_email" value="{{ showed_user.email }}" required>
-            
-            <select name="role" id="edited_role" required>
-                {% for role in Permissions.roles.values() %}
-                {% if Permissions.roles[role.name].hierarchy > Permissions.roles[user.role].hierarchy %}
-                    {% if role.name == showed_user.role %}
-                    <option value="{{ role.name }}" selected>{{ role }}</option>
-                    {% else %}
-                    <option value="{{ role.name }}">{{ role }}</option>
-                    {% endif %}
+    <div class="user_container">
+        {% for showed_user in users %}
+        <div class="user_card">
+            <h3>{{ showed_user.username }}#{{ showed_user.id }}</h3>
+            <h4>{{ showed_user.email }}</h4>
+            <h5>{{ Permissions.roles[showed_user.role] }}</h5>
+            <div class="user_tools">
+                <div class="user_status">
+                    <div class="status_circle" style="background-color: {{ Permissions.status[showed_user.status].color }};">
+                    </div>
+                    <span>
+                        {{ showed_user.status.capitalize().replace('_', ' ') }}
+                    </span>
+                </div>
+                {% if user.can('edit_user') %}
+                <button onclick="">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
+                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
+                    </svg>
+                </button>
                 {% endif %}
-                {% endfor %}
-            </select>
-            
-            <button>
-                Edit user
-            </button>
-        </form>
-        <form action="{{ url_for('admin.change_status', id = showed_user.id) }}" method="POST">
-            <label for="status">Change status</label>
-            <input type="hidden" name="id" value="{{ user.id }}">
-            <select name="status" id="edited_status" required>
-                {% for status in Permissions.status.values() %}
-                    {% if status.name == showed_user.status %}
-                    <option value="{{ status.name }}" selected>{{ status }}</option>
-                    {% else %}
-                    <option value="{{ status.name }}">{{ status }}</option>
-                    {% endif %}
-                {% endfor %}
-            </select>
-            <button>
-                Update status
-            </button>
-        </form>
-        <form action="{{ url_for('admin.reset_password', id = showed_user.id) }}" method="POST">
-            <label for="new_password">New password</label>
-            <input type="password" name="password" id="new_password" required>
-            <button>
-                Reset password
-            </button>
-        </form>
-        {% endif %}
-    </div>
-    {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 

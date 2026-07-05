@@ -12,10 +12,70 @@ main > div {
     box-shadow: 0 0 10px 5px #0006;
 }
 
-.settings {
+.users {
     width: 70%;
 }
 
 .stadistics {
     width: 30%;
+}
+
+.user_container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 22vh;
+    gap: 20px;
+}
+
+.user_card {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 0 5px 1px #0005;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.user_card h3 {
+    border-radius: 10px 10px 0 0;
+    height: 22%;
+    padding: 10px 20px;
+    font-size: 15px;
+    background-color: #30323d;
+    color: #fff;
+}
+
+.user_tools {
+    display: flex;
+    height: 20%;
+    justify-content: space-between;
+    background-color: #30323d;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 10px;
+}
+
+.user_tools div {
+    font-style: italic;
+    display: flex;
+    color: #fff;
+    gap: 10px;
+    align-items: center;
+}
+
+.user_tools .status_circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 100%;
+}
+
+.user_tools button {
+    color: #fff;
+    background: none;
+    border: none;
+}
+
+.user_tools button:hover {
+    cursor: pointer;
 }

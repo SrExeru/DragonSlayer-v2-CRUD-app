@@ -45,8 +45,9 @@ class UserRole:
                 self.permissions[permission] = False
         
 class UserStatus:
-    def __init__(self, name: str, *denied_permissions, deny_all: bool = False):
+    def __init__(self, name: str, color: str, *denied_permissions, deny_all: bool = False):
         self.name = name
+        self.color = color
         if deny_all:
             self.denied_permissions = PERMISSIONS
         else:
@@ -112,17 +113,20 @@ UserRole(
 # User status
 
 UserStatus(
-    'active'
+    'active',
+    '#63a375'
 )
 
 UserStatus(
-    'suspended', 
+    'suspended',
+    '#fc9e4f',
     'read_tickets',
     'create_user', 'edit_user', 'reset_password', 'delete_user'
 )
 
 UserStatus(
     'inactive',
+    '#fd151b',
     deny_all = True
 )
 
