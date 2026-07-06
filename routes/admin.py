@@ -2,8 +2,10 @@ from flask import Blueprint, render_template, session, redirect, request, url_fo
 from utils.auth import login_required, user_can, user_can_affect
 from utils.db import db
 from models.user import User
+from models.ticket import Ticket
 from utils.config import Permissions, logged_show
 from werkzeug.security import generate_password_hash
+from sqlalchemy import select, func
 
 admin = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -13,12 +15,28 @@ admin = Blueprint('admin', __name__, url_prefix='/admin')
 def menu ():
     users = db.session.query(User).all()
     
+    stadistics = {
+        'users': {
+            'total': db.session.scalar(select(func.count()).select_from(User)),
+            'active': db.session.scalar(select(func.count()).select_from(User).where(User.status == 'active')),
+            'suspended': db.session.scalar(select(func.count()).select_from(User).where(User.status == 'suspended')),
+            'inactive': db.session.scalar(select(func.count()).select_from(User).where(User.status == 'inactive'))
+            },
+        'tickets': {
+            'total': db.session.scalar(select(func.count()).select_from(Ticket)),
+            'pending': db.session.scalar(select(func.count()).select_from(Ticket).where(Ticket.status == 'pending')),
+            'in_progress': db.session.scalar(select(func.count()).select_from(Ticket).where(Ticket.status == 'in_progress')),
+            'finished': db.session.scalar(select(func.count()).select_from(Ticket).where(Ticket.status == 'finished'))
+        }
+    }
+    
     return logged_show(
         'admin.html',
         title = 'Panel',
         style = url_for('static', filename = 'css/admin.css'),
         script = url_for('static', filename = 'js/admin.js'),
-        users = users
+        users = users,
+        stadistics = stadistics
     )
     
 @admin.route('/user/<id>')

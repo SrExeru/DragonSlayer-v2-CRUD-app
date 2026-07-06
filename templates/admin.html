@@ -180,6 +180,42 @@
 
 <div class="stadistics">
     <h2>Stadistics</h2>
+    <div class="stad_container">
+        <div class="stad_sup">
+            <h3>Users</h3>
+            <span>{{ stadistics['users']['total'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #63a375;">
+            <h4>Active</h4>
+            <span>{{ stadistics['users']['active'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #fc9e4f;">
+            <h4>suspended</h4>
+            <span>{{ stadistics['users']['suspended'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #fd151b;">
+            <h4>Inactive</h4>
+            <span>{{ stadistics['users']['inactive'] }}</span>
+        </div>
+    </div>
+    <div class="stad_container">
+        <div class="stad_sup">
+            <h3>Tickets</h3>
+            <span>{{ stadistics['tickets']['total'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #63a375;">
+            <h4>Pending</h4>
+            <span>{{ stadistics['tickets']['pending'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #fc9e4f;">
+            <h4>In progress</h4>
+            <span>{{ stadistics['tickets']['in_progress'] }}</span>
+        </div>
+        <div class="stad_info" style="background-color: #fd151b;">
+            <h4>Finished</h4>
+            <span>{{ stadistics['tickets']['finished'] }}</span>
+        </div>
+    </div>
 </div>
 
 
