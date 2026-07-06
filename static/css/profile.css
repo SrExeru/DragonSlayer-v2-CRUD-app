@@ -57,3 +57,23 @@ form button {
 form button:hover {
     cursor: pointer;
 }
+
+@media (max-width: 1400px) {
+    .basic_info {
+        width: 30%;
+    }
+
+    .settings {
+        width: 70%;
+    }
+}
+
+@media (max-width: 1000px) {
+    main {
+        flex-direction: column;
+    }
+
+    .basic_info, .settings {
+        width: 100%;
+    }
+}
