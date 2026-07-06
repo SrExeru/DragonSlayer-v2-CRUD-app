@@ -16,19 +16,25 @@ def login_user ():
             return render_template(
                 'login.html',
                 title = 'Login',
+                style = url_for('static', filename = 'css/login.css'),
                 error = 'incorrect email or password.'
             )
         elif user.status == 'inactive':
             return render_template(
                 'login.html',
                 title = 'Login',
+                style = url_for('static', filename = 'css/login.css'),
                 error = 'inactive user.'
             )
         else:
             session['id'] = user.id
             return redirect(url_for('main.home'))
         
-    return render_template('login.html', title='Login')
+    return render_template(
+        'login.html',
+        title = 'Login',
+        style = url_for('static', filename = 'css/login.css')
+    )
 
 @auth.route('/logout')
 @login_required

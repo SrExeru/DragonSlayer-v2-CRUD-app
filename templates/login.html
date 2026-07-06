@@ -4,10 +4,14 @@
 
 <form action="{{ url_for('auth.login_user') }}" method="POST">
     <h1>Login</h1>
-    <label for="email">Email</label>
-    <input type="text" name="email" id="email" required>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required>
+    <div class="question">
+        <label for="email">Email</label>
+        <input type="text" name="email" id="email" required>
+    </div>
+    <div class="question">
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+    </div>
     <button>
         Login
     </button>
