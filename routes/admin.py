@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, request, url_for, abort, flash
+from flask import Blueprint, render_template, session, redirect, request, url_for, abort, flash, jsonify
 from utils.auth import login_required, user_can, user_can_affect
 from utils.db import db
 from models.user import User
@@ -17,8 +17,25 @@ def menu ():
         'admin.html',
         title = 'Panel',
         style = url_for('static', filename = 'css/admin.css'),
+        script = url_for('static', filename = 'js/admin.js'),
         users = users
     )
+    
+@admin.route('/user/<id>')
+@login_required
+@user_can('access_admin')
+def user_info (id):
+    user = db.session.query(User).filter_by(id = id).first()
+    
+    u_info = {
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+        'role': user.role,
+        'status': user.status
+    }
+    
+    return jsonify(u_info)
     
 @admin.route('/register', methods=['POST'])
 @login_required
@@ -43,16 +60,19 @@ def register_user ():
     
     return redirect(url_for('admin.menu'))
 
-@admin.route('/edit/', methods=['POST'])
+@admin.route('/edit', methods=['POST'])
 @login_required
 @user_can_affect('edit_user')
 def edit_user ():
     if request.method == 'POST':
         id = request.form.get('id')
+        
         user = db.session.query(User).filter_by(id = id).first()
+        
         edited_username = request.form.get('username')
         edited_email = request.form.get('email')
         edited_role = request.form.get('role')
+        edited_status = request.form.get('status')
         
         if Permissions.roles[session['role']].hierarchy > Permissions.roles[edited_role].hierarchy:
             abort(403)
@@ -60,7 +80,9 @@ def edit_user ():
             user.username = edited_username
             user.email = edited_email
             user.role = edited_role
+            user.status = edited_status
             db.session.commit()
+            
     return redirect(url_for('admin.menu'))
         
 @admin.route('/reset_password', methods=['POST'])
@@ -75,18 +97,5 @@ def reset_password ():
         user.password = generate_password_hash(new_password)
         db.session.commit()
                 
-    return redirect(url_for('admin.menu'))
-
-@admin.route('/change_status', methods=['POST'])
-@login_required
-@user_can_affect('edit_user')
-def change_status ():
-    if request.method == 'POST':
-        id = request.form.get('id')
-        user = db.session.query(User).filter_by(id = id).first()
-        
-        user.status = request.form.get('status')
-        db.session.commit()
-            
     return redirect(url_for('admin.menu'))
         

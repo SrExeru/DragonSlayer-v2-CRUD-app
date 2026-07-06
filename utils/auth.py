@@ -37,7 +37,7 @@ def user_can_affect (*perms):
         @wraps(f)
         def wrapper(*args, **kwargs):
             author = db.session.query(User).filter_by(id = session.get('id')).first()
-            affected = db.session.query(User).filter_by(id = request.view_args.get('id')).first()
+            affected = db.session.query(User).filter_by(id = request.form.get('id')).first()
             if affected is None:
                 abort(404)
             for perm in perms:

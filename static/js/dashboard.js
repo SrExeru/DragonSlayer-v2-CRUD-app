@@ -1,4 +1,4 @@
-async function obtainTicket (id) {
+async function getTicket (id) {
     try {
         let ticket = await fetch(`/ticket/${id}`);
 
@@ -11,12 +11,12 @@ async function obtainTicket (id) {
     } catch (error) {
         console.error('Error: ', error);
     }
-    
 };
 
 async function editTicket (id) {
-    let ticket = await obtainTicket(id);
+    let ticket = await getTicket(id);
     let modal = document.getElementById('edit_ticket');
+    
     modal.showModal();
     
     let t_id = document.getElementById('id_edit');
@@ -33,7 +33,7 @@ async function editTicket (id) {
 };
 
 async function concludeTicket (id) {
-    let ticket = await obtainTicket(id);
+    let ticket = await getTicket(id);
     let modal = document.getElementById('conclude_ticket');
     modal.showModal();  
 
